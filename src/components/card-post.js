@@ -1,32 +1,29 @@
 import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
-const CardPost = props => {
-  console.log(props);
+const CardPost = ({ data, navigation }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate("Details", { id: data.id })}
+    >
       <View style={styles.card}>
         <Image
-          style={{
-            width: 120,
-            height: 120,
-            borderTopLeftRadius: 5,
-            borderBottomLeftRadius: 5
-          }}
+          style={styles.image}
           source={{
-            uri: `${props.image}`
+            uri: `https://picsum.photos/id/${data.id}/120/120`
           }}
         />
         <View style={styles.texts}>
           <Text style={styles.title} numberOfLines={2}>
-            {props.text}
+            {data.title}
           </Text>
           <Text style={styles.paragraph} numberOfLines={3}>
-            {props.body}
+            {data.body}
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -67,6 +64,12 @@ const styles = StyleSheet.create({
   paragraph: {
     marginTop: 10,
     fontSize: 14
+  },
+  image: {
+    width: 120,
+    height: 120,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5
   }
 });
 
