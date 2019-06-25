@@ -28,16 +28,15 @@ class DetailsPost extends Component {
     const id = this.props.navigation.getParam("id");
     retrieveData("posts").then(data => {
       data = JSON.parse(data);
-
-      retrieveData("users").then(users => {
-        users = SON.parse(users);
-        console.log(users);
-        users.map(user => {
-          if (user.userId === id) this.setState({ user });
-        });
-      });
       data.map(post => {
         if (post.id === id) this.setState({ data: post });
+      });
+      retrieveData("users").then(users => {
+        users = JSON.parse(users);
+        console.log(users, data.userId);
+        users.map(user => {
+          if (user.id === this.state.data.userId) this.setState({ user });
+        });
       });
     });
     NetInfo.getConnectionInfo().then(async connectionInfo => {
