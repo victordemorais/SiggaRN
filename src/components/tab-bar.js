@@ -24,9 +24,7 @@ const TabBar = props => {
       <Image
         style={styles.image}
         resizeMode={"contain"}
-        source={{
-          uri: "https://sigga.com.br/img/home/logo-sigga-branca.png"
-        }}
+        source={require("../../assets/imgs/logo.png")}
       />
     </View>
   );

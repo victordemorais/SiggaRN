@@ -1,11 +1,20 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, ScrollView, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Alert,
+  NetInfo
+} from "react-native";
 import Container from "../components/background";
 import TabBar from "../components/tab-bar";
 import colors from "../configs/colors";
 import Posts from "../services/posts";
 import Users from "../services/users";
 import { ButtonIcon } from "../components/button";
+import { retrieveData } from "../configs/storage";
 
 class DetailsPost extends Component {
   state = {
@@ -15,16 +24,37 @@ class DetailsPost extends Component {
   static navigationOptions = {
     header: navigation => <TabBar {...navigation} back />
   };
-
-  componentWillMount() {
+  getPost() {
     const id = this.props.navigation.getParam("id");
-    let post = new Posts();
-    let user = new Users();
-    post.show(id).then(response => {
-      user.show(response.userId).then(user => {
-        this.setState({ data: response, user });
+    retrieveData("posts").then(data => {
+      data = JSON.parse(data);
+
+      retrieveData("users").then(users => {
+        users = SON.parse(users);
+        console.log(users);
+        users.map(user => {
+          if (user.userId === id) this.setState({ user });
+        });
+      });
+      data.map(post => {
+        if (post.id === id) this.setState({ data: post });
       });
     });
+    NetInfo.getConnectionInfo().then(async connectionInfo => {
+      if (connectionInfo.type !== "none") {
+        let post = new Posts();
+        let user = new Users();
+        post.show(id).then(response => {
+          user.show(response.userId).then(user => {
+            this.setState({ data: response, user });
+          });
+        });
+      } else {
+      }
+    });
+  }
+  componentWillMount() {
+    this.getPost();
   }
   deletePost() {
     const id = this.props.navigation.getParam("id");
