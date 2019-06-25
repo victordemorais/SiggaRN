@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView, Alert } from "react-native";
 import Container from "../components/background";
 import TabBar from "../components/tab-bar";
 import colors from "../configs/colors";
 import Posts from "../services/posts";
 import Users from "../services/users";
+import { ButtonIcon } from "../components/button";
 
 class DetailsPost extends Component {
   state = {
@@ -23,6 +24,23 @@ class DetailsPost extends Component {
       user.show(response.userId).then(user => {
         this.setState({ data: response, user });
       });
+    });
+  }
+  deletePost() {
+    const id = this.props.navigation.getParam("id");
+    const post = new Posts();
+    post.delete(id).then(response => {
+      Alert.alert("Success!", "Your post was successfully deleted.", [
+        {
+          text: "OK",
+          onPress: () => this.props.navigation.navigate("Home")
+        }
+      ]);
+    });
+  }
+  editPost() {
+    this.props.navigation.navigate("NewPost", {
+      id: this.props.navigation.getParam("id")
     });
   }
   render() {
@@ -52,6 +70,18 @@ class DetailsPost extends Component {
                 <Text>{user.name}</Text>
               </Text>
             </View>
+            <View style={styles.buttons}>
+              <ButtonIcon
+                icon={"edit"}
+                color={colors.secondary}
+                onPress={() => this.editPost()}
+              />
+              <ButtonIcon
+                icon={"trash"}
+                color={colors.primary}
+                onPress={() => this.deletePost()}
+              />
+            </View>
           </View>
         </View>
       </Container>
@@ -68,7 +98,8 @@ const styles = StyleSheet.create({
     height: 80,
     flexDirection: "row",
     marginBottom: 0,
-    backgroundColor: colors.light
+    backgroundColor: colors.light,
+    justifyContent: "space-between"
   },
   avatar: {
     height: 60,
@@ -91,6 +122,10 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 16,
     paddingBottom: 20
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 });
 export default DetailsPost;

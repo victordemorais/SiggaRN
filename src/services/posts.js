@@ -7,7 +7,13 @@ export default class Posts extends BaseService {
   show = (id: Number) => {
     return this.get(`/posts/${id}`);
   };
-  create = data => {
-    return this.post(`/posts/${id}`, data);
+  create = (data: Object) => {
+    return this.post(`/posts`, data);
+  };
+  edit = (id: Number, data: Object) => {
+    return this.put(`/posts/${id}`, data);
+  };
+  delete = (id: Number) => {
+    return this.del(`/posts/${id}`, {});
   };
 }

@@ -32,8 +32,8 @@ export default class BaseService {
   del(path: string, form: Object) {
     return fetch(`${API_URL}${path}`, this.body(DELETE_METHOD, form))
       .then(response => response.json())
-      .then(response => {
-        return response;
+      .then(json => {
+        return json;
       });
   }
 
